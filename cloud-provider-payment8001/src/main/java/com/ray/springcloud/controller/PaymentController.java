@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ray.springcloud.entities.CommonResult;
@@ -20,7 +21,7 @@ public class PaymentController {
 	private PaymentService paymentService;
 
 	@PostMapping(value = "/payment/create")
-	public CommonResult<Integer> create(Payment payment) {
+	public CommonResult<Integer> create(@RequestBody Payment payment) {
 		int result = paymentService.create(payment);
 		log.info("插入結果:" + result);
 		if (result > 0) {
@@ -32,11 +33,11 @@ public class PaymentController {
 	@GetMapping(value = "/payment/get/{id}")
 	public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id) {
 		Payment payment = paymentService.getPaymentById(id);
-		log.info("插入結果:" + payment);
+		log.info("查詢結果:" + payment);
 		if (payment != null) {
-			return new CommonResult<Payment>(200, "新增成功", payment);
+			return new CommonResult<Payment>(200, "查詢成功", payment);
 		} else {
-			return new CommonResult<Payment>(444, "新增失敗", payment);
+			return new CommonResult<Payment>(444, "查詢失敗", payment);
 		}
 	}
 
