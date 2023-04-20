@@ -1,5 +1,12 @@
 # SpringCloudDemo
 
+# 本地啟用專案
+若要在本地啟用測試專案的話，  
+需要額外設定本地DNS，  
+原因是因為eureka server集群不能在同一個hostname啟用，  
+所以需要在C:\Windows\System32\dirvers\etc\hosts裡面新增映射  
+本專案將 127.0.0.1 映射到 eureka8887.com、eureka8888.com 
+
 # 專案架構
 1. cloud-api-commons : 放置所有共用的Entity，避免在每個微服務都建立重複的Class，其他服務利用pom引入此專案內容。
 2. cloud-consumer-order80 : 消費服務，主要用於調用 payment 服務。
