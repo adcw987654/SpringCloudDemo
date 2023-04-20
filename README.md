@@ -38,6 +38,7 @@ server2將自身服務信息註冊給server1、server3
 server3將自身服務信息註冊給server1、server2
 註冊完後，將client服務信息註冊給server1，client服務的信息會自動同步給server2、server3
 
+![image](https://user-images.githubusercontent.com/59738136/233244543-7d7d8a5e-1a0e-4276-a03b-c5bf46bb9e4c.png)
 
 
 ## 服務調用
