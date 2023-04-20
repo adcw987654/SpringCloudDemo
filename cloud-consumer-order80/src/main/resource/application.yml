@@ -1,7 +1,12 @@
 server:
   port: 80
 
+spring:
+  application:
+    name: cloud-order-service
+
 eureka: 
   client: 
     serviceUrl: 
-      defaultZone: http://localhost:8888/eureka/
+      #defaultZone: http://localhost:8888/eureka/
+      defaultZone: http://localhost:8888/eureka/,http://localhost:8887/eureka/

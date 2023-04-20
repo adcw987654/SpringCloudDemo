@@ -1,18 +1,18 @@
 server: 
-  port: 8888
+  port: 8887
   
-spring: 
-  application: 
-    name: cloud-eureka-server8888
+spring:
+  application:
+    name: cloud-eureka-server8887
 
 eureka: 
   instance: 
-    hostname: eureka8888.com
+    hostname: eureka8887.com
   client: 
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl: 
-      defaultZone: http://eureka8887.com:8887/eureka/
+      defaultZone: http://eureka8888.com:8888/eureka/
 #注意 使用集群eureka時，hostname要不一樣，
 #所以本地測試時需額外將 C:\Windows\System32\drivers\etc\hosts 修改本地DNS映射
 #例如本專案將 127.0.0.1 映射到 eureka8887.com、eureka8888.com 

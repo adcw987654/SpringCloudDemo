@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-public class OrderController {
+public class OrderControllerRest {
 
 	public static final String PAYMENT_URL = "http://localhost:8001";
 

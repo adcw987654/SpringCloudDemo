@@ -15,8 +15,8 @@ spring:
 eureka: 
   client: 
     serviceUrl: 
-      defaultZone: http://localhost:8888/eureka/
-      
+      defaultZone: http://localhost:8888/eureka/,http://localhost:8887/eureka/
+            
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   type-aliasese-package: com.ray.springcloud.entities
