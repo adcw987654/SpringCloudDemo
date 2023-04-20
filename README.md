@@ -1,5 +1,19 @@
 # SpringCloudDemo
 
+# 本地啟用專案
+若要在本地啟用測試專案的話，  
+需要額外設定本地DNS，  
+原因是因為eureka server集群不能在同一個hostname啟用，  
+所以需要在C:\Windows\System32\dirvers\etc\hosts裡面新增映射  
+本專案將 127.0.0.1 映射到 eureka8887.com、eureka8888.com 
+
+# 專案架構
+1. cloud-api-commons : 放置所有共用的Entity，避免在每個微服務都建立重複的Class，其他服務利用pom引入此專案內容。
+2. cloud-consumer-order80 : 消費服務，主要用於調用 payment 服務。
+3. cloud-provider-payment8001 : 付款服務，主要用於寫入、讀取 payment table相關服務。
+4. cloud-eureka-server8888 : 註冊中心服務，用於註冊服務，以及提供服務消費者所需要的服務資訊。
+
+
 ## 服務註冊與發現
 
 服務註冊與發現流程中含有三個角色
@@ -31,6 +45,7 @@ server2將自身服務信息註冊給server1、server3
 server3將自身服務信息註冊給server1、server2
 註冊完後，將client服務信息註冊給server1，client服務的信息會自動同步給server2、server3
 
+![image](https://user-images.githubusercontent.com/59738136/233244543-7d7d8a5e-1a0e-4276-a03b-c5bf46bb9e4c.png)
 
 
 ## 服務調用
