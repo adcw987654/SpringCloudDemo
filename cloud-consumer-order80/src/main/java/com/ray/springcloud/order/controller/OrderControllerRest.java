@@ -1,6 +1,7 @@
 package com.ray.springcloud.order.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,21 +16,27 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class OrderControllerRest {
 
-	public static final String PAYMENT_URL = "http://localhost:8001";
+	/**
+	 * 從eureka server 取得資訊
+	 */
+	public static final String PAYMENT_URL = "http://CLOUD-PAYMENT-SERVICE";
 
 	@Autowired
-	private RestTemplate restTemplate;
+	@Qualifier("RibbonRestTemplate")
+	private RestTemplate ribbonRestTemplate; // 透過ribbonRestTemplate調用payment
+	
+	
 
-	@GetMapping("/consumer/payment/create")
+	@GetMapping("/ribbon/consumer/payment/create")
 	public CommonResult<Payment> create(Payment payment) {
 		log.info("call order payment create");
-		return restTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, CommonResult.class);
+		return ribbonRestTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, CommonResult.class);
 	}
 
-	@GetMapping("/consumer/payment/get/{id}")
+	@GetMapping("/ribbon/consumer/payment/get/{id}")
 	public CommonResult<Payment> getPayment(@PathVariable("id") Long id) {
 		log.info("call order payment get");
-		return restTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
+		return ribbonRestTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
 	}
 
 }

@@ -1,0 +1,4 @@
+CREATE TABLE `test`.payment (
+  id BIGINT NOT NULL PRIMARY KEY,
+  serial VARCHAR(255) NOT NULL
+);
