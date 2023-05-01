@@ -26,6 +26,7 @@ public class PaymentController {
 
 	@PostMapping(value = "/payment/create")
 	public CommonResult<Integer> create(@RequestBody Payment payment) {
+		log.info("port:" + port);
 		int result = paymentService.create(payment);
 		log.info("插入結果:" + result);
 		if (result > 0) {
