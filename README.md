@@ -60,6 +60,58 @@ https://cloud.tencent.com/developer/article/2119911
 
 ## 服務降級
 
+若client調用服務的某個API，而API回應時數過久/發生錯誤，
+可以透過Hystrix指定fallBack方法，
+可以加在Controller(client 調用 service)或者Service(service 調用 service)的方法上，
+實作方法如下:
+```
+@HystrixCommand(fallbackMethod = "test_TimeOutHandler", commandProperties = {
+  @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")
+})
+public String testMethod(Integer id){
+  int timeNumber = 5;
+  try{
+    TimeUnit.SECONDS.sleep(timeNumber);
+  }catch(InterruptedException e){
+    e.printStackTrace();
+  }
+  return "success";
+}
+public String test_TimeOutHandler(Integer id){
+  return "系統繁忙或運行報錯，服務降級。"
+}
+
+```
+上述案例不管是testMethod中有拋錯或者超時，皆會調用test_TimeOutHandler方法。  
+也可以透過@DefaultProperties(defaultFallback = "method_name")標住在class上，  
+並在需要降級服務的方法加入@HystrixCommand，  
+被標註@HystrixCommand而沒有指定fallbackMethod的方法則會換呼叫method_name方法。  
+
+也可以直接透過直接在FeignClient的標籤加入fallback標籤實作  
+```
+@Component
+@FeignClient(value = "TEST-SERVICE", fallback =  TestFallbackService.class)
+public interface TestService{
+  @GetMapping("/test/1")
+  public String test_OK();
+
+  @GetMapping("/test/2")
+  public String test_ERR();
+}
+
+public class TestFallbackService implements TestService{
+  @Override
+  public String test_OK(){
+    return "系統繁忙或運行test_OK方法報錯，服務降級。";
+  }
+  
+  @Override
+  public String test_ERR(){
+    return "系統繁忙或運行test_ERR報錯，服務降級。";
+  }
+}
+```
+
 ## 服務消息隊列
 
 ## 配置中心管理
