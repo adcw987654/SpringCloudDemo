@@ -54,6 +54,27 @@ https://cloud.tencent.com/developer/article/2119911
 
 ## 服務熔斷
 
+與服務降級類似，  
+差別在於服務熔斷會判斷在指定秒數內，若request次數超過指定次數，  
+且request錯誤數(含超時、Exception)超過指定百分比，  
+則會進入休眠狀態，將所有的請求轉發到fallback方法，  
+休眠時間到期時，會進入半開狀態，  
+釋放其中一次request，
+若此request正常，則回復正常，  
+若此request依然有問題，則重新計時一次休眠時間。
+
+實作標籤如下:
+```
+@HystrixCommand(fallbackMethod = "test_TimeOutHandler", commandProperties = {
+  @HystrixProperty(name = "circuitBreaker.enabled", value = "true"), // 開啟熔斷判斷
+  @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"), // 判斷的請求次數
+  @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"), // 請求次數的時間範圍
+  @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60"), // 請求的失敗率
+})
+```
+
+
+
 ## 負載均衡
 //TODO
 ![image](https://user-images.githubusercontent.com/59738136/234154447-4292df15-1b46-4481-ae60-dc2f0f43c624.png)
