@@ -139,6 +139,13 @@ public class TestFallbackService implements TestService{
 
 ## 服務網關
 
+網關作用是給前端呼叫request的地方，  
+所有需要調用服務API都需要先經過網關，  
+Gateway是基於WebFlux框架集成，  
+工作流程主要為:  
+路由轉發 + Filter Chain   //TODO
+
+
 ## 服務監控
 
 ## 全鏈路追蹤
