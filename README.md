@@ -29,6 +29,14 @@ Eureka 服務註冊中心 實際運行流程如下:
 4. 服務消費者向註冊中心取得已註冊的服務信息列表
 5. 獲得服務信息後，透過HTTP / MQ 調用服務提供者的服務
 
+可以設定以下參數指定向註冊中心取得服務列表的頻率，  
+值得注意的是，若已經取得服務列表的情況下，註冊中心突然不能連線，  
+則下次取得服務列表時就不會刷新本地的服務列表資訊，  
+仍然可以依照舊版的服務列表呼叫服務。
+```
+eureka.instance.registryFetchIntervalSeconds=60
+```
+
 ![image](https://user-images.githubusercontent.com/59738136/224939925-6447b04f-4c68-498f-8d6a-9fae829f1fc3.png)
 
 ### Eureka Server 集群
