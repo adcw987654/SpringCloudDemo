@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.ray.springcloud.entities.CommonResult;
+import com.ray.springcloud.entities.ResponseEntity;
 import com.ray.springcloud.entities.Payment;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +28,15 @@ public class OrderControllerRibbonRest {
 	
 
 	@GetMapping("/ribbon/consumer/payment/create")
-	public CommonResult<Payment> create(Payment payment) {
+	public ResponseEntity<Payment> create(Payment payment) {
 		log.info("call order payment create");
-		return ribbonRestTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, CommonResult.class);
+		return ribbonRestTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, ResponseEntity.class);
 	}
 
 	@GetMapping("/ribbon/consumer/payment/get/{id}")
-	public CommonResult<Payment> getPayment(@PathVariable("id") Long id) {
+	public ResponseEntity<Payment> getPayment(@PathVariable("id") Long id) {
 		log.info("call order payment get");
-		return ribbonRestTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
+		return ribbonRestTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id, ResponseEntity.class);
 	}
 
 }

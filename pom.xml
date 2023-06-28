@@ -22,10 +22,13 @@
 		<module>cloud-eureka-server8887</module>
 		<module>cloud-consumer-order80</module>
 		<module>cloud-api-commons</module>
+		<module>cloud-user-server</module>
+		<module>cloud-gateway-server</module>
 	</modules>
 	<properties>
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mybatis.starter.version>1.3.0</mybatis.starter.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -38,13 +41,19 @@
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<version>2.1.3.RELEASE</version>
 		</dependency>
+
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>

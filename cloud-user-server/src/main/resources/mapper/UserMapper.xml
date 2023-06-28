@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ray.springcloud.dao.UserDao">
+
+    <insert id="create" parameterType="com.ray.springcloud.entities.UserEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into usertable (username, password, email, oauth2, nickName)
+        values (#{username}, #{password}, #{email}, #{oauth2}, #{nickName})
+    </insert>
+
+    <resultMap id="BaseResultMap"
+               type="com.ray.springcloud.entities.UserEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="oauth2" column="oauth2" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nickName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getUserByUserName" parameterType="map"
+            resultMap="BaseResultMap">
+        select * from usertable where username=#{username}
+    </select>
+</mapper>

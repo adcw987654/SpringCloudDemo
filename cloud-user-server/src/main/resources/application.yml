@@ -1,9 +1,6 @@
-server:
-  port: 8001
-  
 spring:
   application:
-    name: cloud-payment-service
+    name: cloud-user-server
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: org.gjt.mm.mysql.Driver
@@ -11,11 +8,9 @@ spring:
     username: user
     password: password
 
-eureka: 
-  client: 
-    serviceUrl: 
-      defaultZone: http://localhost:8888/eureka/,http://localhost:8887/eureka/
-            
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   type-aliasese-package: com.ray.springcloud.entities
+
+jwt:
+  key: urX1aYaVyJUSVsmlRALiVh8XbFt9AOjFuerHYfpu8Mk=

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.ray.springcloud.entities.CommonResult;
+import com.ray.springcloud.entities.ResponseEntity;
 import com.ray.springcloud.entities.Payment;
 
 @Component
@@ -15,9 +15,9 @@ import com.ray.springcloud.entities.Payment;
 public interface PaymentFeignClient {
 
 	@PostMapping(value = "/payment/create")
-	public CommonResult<Integer> create(@RequestBody Payment payment);
+	public ResponseEntity<Integer> create(@RequestBody Payment payment);
 
 	@GetMapping(value = "/payment/get/{id}")
-	public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id);
+	public ResponseEntity<Payment> getPaymentById(@PathVariable("id") Long id);
 
 }
