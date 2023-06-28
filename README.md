@@ -29,6 +29,14 @@ Eureka 服務註冊中心 實際運行流程如下:
 4. 服務消費者向註冊中心取得已註冊的服務信息列表
 5. 獲得服務信息後，透過HTTP / MQ 調用服務提供者的服務
 
+可以設定以下參數指定向註冊中心取得服務列表的頻率，  
+值得注意的是，若已經取得服務列表的情況下，註冊中心突然不能連線，  
+則下次取得服務列表時就不會刷新本地的服務列表資訊，  
+仍然可以依照舊版的服務列表呼叫服務。
+```
+eureka.instance.registryFetchIntervalSeconds=60
+```
+
 ![image](https://user-images.githubusercontent.com/59738136/224939925-6447b04f-4c68-498f-8d6a-9fae829f1fc3.png)
 
 ### Eureka Server 集群
@@ -54,17 +62,97 @@ https://cloud.tencent.com/developer/article/2119911
 
 ## 服務熔斷
 
+與服務降級類似，  
+差別在於服務熔斷會判斷在指定秒數內，若request次數超過指定次數，  
+且request錯誤數(含超時、Exception)超過指定百分比，  
+則會進入休眠狀態，將所有的請求轉發到fallback方法，  
+休眠時間到期時，會進入半開狀態，  
+釋放其中一次request，
+若此request正常，則回復正常，  
+若此request依然有問題，則重新計時一次休眠時間。
+
+實作標籤如下:
+```
+@HystrixCommand(fallbackMethod = "test_TimeOutHandler", commandProperties = {
+  @HystrixProperty(name = "circuitBreaker.enabled", value = "true"), // 開啟熔斷判斷
+  @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"), // 判斷的請求次數
+  @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"), // 請求次數的時間範圍
+  @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60"), // 請求的失敗率
+})
+```
+
+
+
 ## 負載均衡
 //TODO
 ![image](https://user-images.githubusercontent.com/59738136/234154447-4292df15-1b46-4481-ae60-dc2f0f43c624.png)
 
 ## 服務降級
 
+若client調用服務的某個API，而API回應時數過久/發生錯誤，
+可以透過Hystrix指定fallBack方法，
+可以加在Controller(client 調用 service)或者Service(service 調用 service)的方法上，
+實作方法如下:
+```
+@HystrixCommand(fallbackMethod = "test_TimeOutHandler", commandProperties = {
+  @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")
+})
+public String testMethod(Integer id){
+  int timeNumber = 5;
+  try{
+    TimeUnit.SECONDS.sleep(timeNumber);
+  }catch(InterruptedException e){
+    e.printStackTrace();
+  }
+  return "success";
+}
+public String test_TimeOutHandler(Integer id){
+  return "系統繁忙或運行報錯，服務降級。"
+}
+
+```
+上述案例不管是testMethod中有拋錯或者超時，皆會調用test_TimeOutHandler方法。  
+也可以透過@DefaultProperties(defaultFallback = "method_name")標住在class上，  
+並在需要降級服務的方法加入@HystrixCommand，  
+被標註@HystrixCommand而沒有指定fallbackMethod的方法則會換呼叫method_name方法。  
+
+也可以直接透過直接在FeignClient的標籤加入fallback標籤實作  
+```
+@Component
+@FeignClient(value = "TEST-SERVICE", fallback =  TestFallbackService.class)
+public interface TestService{
+  @GetMapping("/test/1")
+  public String test_OK();
+
+  @GetMapping("/test/2")
+  public String test_ERR();
+}
+
+public class TestFallbackService implements TestService{
+  @Override
+  public String test_OK(){
+    return "系統繁忙或運行test_OK方法報錯，服務降級。";
+  }
+  
+  @Override
+  public String test_ERR(){
+    return "系統繁忙或運行test_ERR報錯，服務降級。";
+  }
+}
+```
+
 ## 服務消息隊列
 
 ## 配置中心管理
 
 ## 服務網關
+
+網關作用是給前端呼叫request的地方，  
+所有需要調用服務API都需要先經過網關，  
+Gateway是基於WebFlux框架集成，  
+工作流程主要為:  
+路由轉發 + Filter Chain   //TODO
+
 
 ## 服務監控
 
